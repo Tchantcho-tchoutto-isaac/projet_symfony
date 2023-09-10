@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Hello</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+    <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.css') }}" >
+</head>
+<body>
+ <ol class="list-group">
+ {%for name,content in app.session.get('todos') %}
+    <li class="list-group-item">
+    {{ name }} : {{ content }}
+    </li>
+{% endfor %}  
+</ol>
+
+<h1>Bonjour</h1>
+
+</body>
+</html> 
