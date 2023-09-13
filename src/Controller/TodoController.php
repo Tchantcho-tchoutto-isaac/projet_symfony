@@ -30,26 +30,31 @@ class TodoController extends AbstractController
 
         return $this->render(view:'todo/index.html.twig');
     }
-    #[Route('/todo/{name}/{content}', name: 'todo.add')]
+    #[Route('/todo/add/{name}/{content}', name: 'todo.add')]
 
-public function addTodo(Request $request,$name,$content){
-        $session=$request->$request->getSession();
+    public function addTodo(Request $request,$name,$content){
+        $session = $request->getSession();
 
         if($session->has(name:'todos')){
+
+            $todos=$session->get(name:'todos');
+            if(isset($todos[$name])){
+                $this->addFlash(type:'error',message:"Le todo d'id $name existe deja dans la liste ");
+
+            }
+            else{
+                $todos[$name]=$content;
+                $this->addFlash(type:'succes',message:"Le todo  d'id $name à été ajouter avec succes");
+                $session->set('todos',$todos);
+            }
 
         }
         else{
             $this->addFlash(type:'error',message:"La liste des todos n'est pas encore  initialiser");
         }
 
-        return $this->redirectToRoute(route:'todo');
-        //Verifier si j'ai mon tableau de todo dans la session 
-         // si oui
-            //si on à deja un todo avec le meme name 
-               //si oui afficher erreur 
-                  //si non ajouter et on affiche un message de succes  
-         
-         //si non
+         return $this->redirectToRoute(route:'todo');
+
             //afficher une erreur et on va rediriger vers le controlleur index 
 }
 
