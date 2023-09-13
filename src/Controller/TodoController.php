@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +33,7 @@ class TodoController extends AbstractController
     }
     #[Route('/todo/add/{name}/{content}', name: 'todo.add')]
 
-    public function addTodo(Request $request,$name,$content){
+    public function addTodo(Request $request,$name,$content):RedirectResponse{
         $session = $request->getSession();
 
         if($session->has(name:'todos')){
@@ -44,8 +45,9 @@ class TodoController extends AbstractController
             }
             else{
                 $todos[$name]=$content;
-                $this->addFlash(type:'succes',message:"Le todo  d'id $name à été ajouter avec succes");
                 $session->set('todos',$todos);
+                $this->addFlash(type:'succes',message:"Le todo  d'id $name à été ajouter avec succes");
+                
             }
 
         }
@@ -57,5 +59,76 @@ class TodoController extends AbstractController
 
             //afficher une erreur et on va rediriger vers le controlleur index 
 }
+
+#[Route('/todo/update/{name}/{content}', name: 'todo.update')]
+
+    public function updateTodo(Request $request,$name,$content):RedirectResponse{
+        $session = $request->getSession();
+
+        if(!$session->has(name:'todos')){
+
+            $todos=$session->get(name:'todos');
+            if(isset($todos[$name])){
+                $this->addFlash(type:'error',message:"Le todo d'id $name n'existe pa dans la liste ");
+
+            }
+            else{
+                $todos[$name]=$content;
+                $session->set('todos',$todos);
+                $this->addFlash(type:'succes',message:"Le todo  d'id $name à été modifier  avec succes");
+                
+            }
+
+        }
+        else{
+            $this->addFlash(type:'error',message:"La liste des todos n'est pas encore  initialiser");
+        }
+
+         return $this->redirectToRoute(route:'todo');
+
+            //afficher une erreur et on va rediriger vers le controlleur index 
+}
+
+#[Route('/todo/delete/{name}', name: 'todo.delete')]
+
+    public function deleteTodo(Request $request,$name,$content):RedirectResponse{
+        $session = $request->getSession();
+
+        if(!$session->has(name:'todos')){
+
+            $todos=$session->get(name:'todos');
+            if(isset($todos[$name])){
+                $this->addFlash(type:'error',message:"Le todo d'id $name n'existe pa dans la liste ");
+
+            }
+            else{
+                unset($todos[$name]);
+                $session->set('todos',$todos);
+                $this->addFlash(type:'succes',message:"Le todo  d'id $name à été supprimer   avec succes");
+                
+            }
+
+        }
+        else{
+            $this->addFlash(type:'error',message:"La liste des todos n'est pas encore  initialiser");
+        }
+
+         return $this->redirectToRoute(route:'todo');
+
+            //afficher une erreur et on va rediriger vers le controlleur index 
+}
+
+#[Route('/todo/reset', name: 'todo.reset')]
+
+    public function resetTodo(Request $request):RedirectResponse{
+        $session = $request->getSession();
+
+        $session->remove(name:'todos');
+         return $this->redirectToRoute(route:'todo');
+
+            //afficher une erreur et on va rediriger vers le controlleur index 
+}
+
+
 
 }
