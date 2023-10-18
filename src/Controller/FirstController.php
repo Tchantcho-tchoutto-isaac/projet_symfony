@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FirstController extends AbstractController
 {
+    
     #[Route('/first', name: 'app_first')]
     public function index(): Response
     {
@@ -26,5 +27,12 @@ class FirstController extends AbstractController
 
         ]);
     }
-
+   #[Route('multi/{entier1}/{entier2}',
+       name:'multiplication',
+       requirements:['entier1'=>'\d+','entier2'=>'\d+']
+       )]
+    public function multiplicatio($entier1,$entier2){
+        $resultat=$entier1*$entier2;
+        return new Response(content:"<h1>$resultat</h1>");
+    }
 }
