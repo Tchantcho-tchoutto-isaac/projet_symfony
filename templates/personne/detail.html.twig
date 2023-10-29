@@ -1,14 +1,13 @@
 {% extends 'template.html.twig' %}
 
 {% block body %}
-    {{ dump(personne) }}
     <div class="alert alert-success">
        My Firstname is : {{ personne.firstname }}
        My name is : {{ personne.name }}
-       i have : {{ personne.Age }}
+       i have : {{ personne.Age }} ans 
     </div>
 {% endblock %}
 
 {% block title %}
-    personne
+    {{personne.firstname }} {{personne.firstname }}
 {% endblock %}
