@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Personne;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -26,7 +27,7 @@ class PersonneController extends AbstractController
     public function indexAlls(ManagerRegistry $doctrine , $page,$nbre): Response
     {
         $repository = $doctrine->getRepository(Personne::class); 
-        $nbpersonne = $repository->count([]);
+        $nbpersonne = $repository->Count([]);
 
         $nbrepage=ceil($nbpersonne/$nbre);
      
@@ -76,5 +77,22 @@ class PersonneController extends AbstractController
             'personne' => $personne,
         ]);
     }
+    #[Route('/delete/{id}', name:'personne.delete')]
+    public function deletePersonne( personne $personne=null, ManagerRegistry $doctrine): RedirectResponse {
 
+    if ($personne) {
+        $manager=$doctrine->getManager();
+        //ajouter la fonction de suppression dans la transaction 
+        $manager->remove($personne);
+        //executer la transaction
+        $manager->flush();
+
+        
+    }
+        // Récupérer la personne 
+           //si la personne exixte=> le supprimer et retourner un flasMessage de succès 
+           //si non retourner un flashMessage d'erreur 
+        
+    }
 }
+
