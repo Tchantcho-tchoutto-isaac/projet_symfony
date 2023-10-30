@@ -86,13 +86,17 @@ class PersonneController extends AbstractController
         $manager->remove($personne);
         //executer la transaction
         $manager->flush();
-
-        
+        $this->addFlash(type: 'sucess', message:"la personne à été supprimé avec succès");
+    
+    }else{
+        $this->addFlash(type:'error', message:" la personne est innexistante ");
     }
         // Récupérer la personne 
            //si la personne exixte=> le supprimer et retourner un flasMessage de succès 
            //si non retourner un flashMessage d'erreur 
+    return $this-> redirectToRoute(route:'personne.list.alls');
         
     }
+
 }
 
