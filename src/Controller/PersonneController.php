@@ -22,14 +22,22 @@ class PersonneController extends AbstractController
         return $this->render('personne/index.html.twig', ['personnes' => $personnes]);
     }
     
-    #[Route('/alls', name:'personne.alls')]
-    public function indexAlls(ManagerRegistry $doctrine): Response
+    #[Route('/alls/{page?1}/{nbre?12}', name:'personne.alls')]
+    public function indexAlls(ManagerRegistry $doctrine , $page,$nbre): Response
     {
         $repository = $doctrine->getRepository(Personne::class); 
+        $nbpersonne = $repository->count([]);
+
+        $nbrepage=ceil($nbpersonne/$nbre);
+     
     
-        $personnes = $repository->findBy(['age'=>'30']);
+        $personnes = $repository->findBy([],[],$nbre, offset:($page-1)*$nbre);
     
-        return $this->render('personne/index.html.twig', ['personnes' => $personnes]);
+        return $this->render('personne/index.html.twig', [
+            'personnes' => $personnes,
+            'nbrePage'=>$nbrepage,
+            'page'=>$page
+        ]);
     }
 
 
