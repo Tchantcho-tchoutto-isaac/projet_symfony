@@ -22,6 +22,16 @@ class PersonneController extends AbstractController
     
         return $this->render('personne/index.html.twig', ['personnes' => $personnes]);
     }
+
+    // afficher toutes les personnes 
+    #[Route('/alls/age/{ageMin}/{ageMax}', name:'personne.List.age')]
+    public function PersonneByAge(ManagerRegistry $doctrine,$ageMin, $ageMax): Response
+    {
+        $repository = $doctrine->getRepository(Personne::class); 
+        $personnes=$repository->FindPersonneByInterval($ageMin,$ageMax);
+    
+        return $this->render('personne/index.html.twig', ['personnes' => $personnes]);
+    }
     
     #[Route('/alls/{page?1}/{nbre?12}', name:'personne.alls')]
     public function indexAlls(ManagerRegistry $doctrine , $page,$nbre): Response
