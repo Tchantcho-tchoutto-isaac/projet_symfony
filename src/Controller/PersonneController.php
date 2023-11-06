@@ -86,9 +86,9 @@ class PersonneController extends AbstractController
     {
         $entityManager=$doctrine->getManager();
         $personne= new Personne();
-        $personne->setFirstname('isaac');
-        $personne-> setname('tchantcho');
-        $personne->setAge(27);
+        $personne->setFirstname('geoge');
+        $personne-> setname('Tchoutto ');
+        $personne->setAge(15);
         
 
         //Ajoute l'àperation d'insertion de la personne dans ma transaction
