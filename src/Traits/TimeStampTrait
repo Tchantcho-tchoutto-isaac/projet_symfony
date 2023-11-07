@@ -1,0 +1,23 @@
+<?php 
+namespace App\Traits;
+use Doctrine\ORM\Mapping as ORM;
+trait TimeStampTrait
+{
+    /**
+     * Undocumented variable
+     *
+     * @ORM \DateTime|null
+     */
+    private ?\DateTime $createdAt = null;
+
+    /**
+     * @ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)
+     */
+
+    
+    private ?\DateTimeInterface $updatedAt = null;
+}
+
+
+
+?>

@@ -165,7 +165,8 @@ class Personne
         return $this;
     }
 /**
- * @ORM\PretPersist()
+ * 
+ * @ORM\PrePersist()
  */
 public function onPretPersist (){
     $this->createdAt= new \DateTime();
