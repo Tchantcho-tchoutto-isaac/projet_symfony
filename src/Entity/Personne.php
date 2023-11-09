@@ -9,14 +9,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks;
- */
+#[ORM\HasLifecycleCallbacks()]
+
 class Personne
 {
-
-
+    use TimeStampTrait;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -43,11 +41,7 @@ class Personne
     #[ORM\ManyToOne(inversedBy: 'personnes')]
     private ?job $job = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTime $createdAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
+    
 
     public function __construct()
     {
@@ -145,3 +139,4 @@ class Personne
 
 
 }
+
