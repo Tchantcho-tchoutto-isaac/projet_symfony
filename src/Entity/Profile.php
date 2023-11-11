@@ -7,7 +7,11 @@ use App\Traits\TimeStampTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
-#[ORM\HasLifecycleCallbacks()]
+
+/**
+ * @ORM\HasLifecycleCallbacks()
+ */
+
 class Profile
 {
     Use TimeStampTrait;

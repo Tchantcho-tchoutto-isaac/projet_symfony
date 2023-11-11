@@ -35,7 +35,7 @@ trait TimeStampTrait
 
     public function setUpdatedAt(?\DateTime $updatedAt): static
     {
-        $this->updatedAt = $updatedAt;
+
 
         return $this;
     }
@@ -44,16 +44,18 @@ trait TimeStampTrait
      * @ORM\PrePersist
      */
     public function prePersist()
-    {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+    {   
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
     }
 
     /**
      * @ORM\PreUpdate
      */
+    
     public function preUpdate()
     {
+        error_log('preUpdate called for entity: ' . get_class($this));
         $this->updatedAt = new \DateTime();
     }
 }

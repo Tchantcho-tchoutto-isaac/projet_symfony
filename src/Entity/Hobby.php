@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 
  #[ORM\Entity(repositoryClass: HobbyRepository::class)]
- #[ORM\HasLifecycleCallbacks()]
+ /**
+ * @ORM\HasLifecycleCallbacks()
+ */
 
 
 
