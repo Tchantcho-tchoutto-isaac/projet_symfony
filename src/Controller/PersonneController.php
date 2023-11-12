@@ -7,6 +7,7 @@ use App\Form\PersonneType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -83,19 +84,32 @@ class PersonneController extends AbstractController
 
 
     #[Route('/add', name: 'personne.add')]
-    public function addPersonne(ManagerRegistry $doctrine): Response
+    public function addPersonne(ManagerRegistry $doctrine , Request $request): Response
     {
         $entityManager=$doctrine->getManager();
         $personne=new personne();
         
         $form= $this->createForm(PersonneType::class,$personne );
+        
+        // mon formulaire va aller traiter la requete 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        //Ajoute l'àperation d'insertion de la personne dans ma transaction
+            $manager= $doctrine->getManager();
+            $manager->persist($personne);
+            $entityManager->flush();
+            $this->addFlash(type:'success',message:'à été ajouté avec succès');
+
+            return $this-> redirectToRoute(route: 'personne.List');
        
+        
+    }else{
         return $this->render('personne/add-personne.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+}
+
     #[Route('/delete/{id}', name:'personne.delete')]
     public function deletePersonne( personne $personne=null, ManagerRegistry $doctrine): RedirectResponse {
 

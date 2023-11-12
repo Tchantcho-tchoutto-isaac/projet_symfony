@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+
 use App\Traits\TimeStampTrait;
 use App\Repository\PersonneRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\HasLifecycleCallbacks()
  */
-
 class Personne
 {
     use TimeStampTrait;
@@ -32,8 +32,6 @@ class Personne
     private ?int $age = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-
-
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Profile $profile = null;
 
@@ -41,9 +39,7 @@ class Personne
     private Collection $hobbies;
 
     #[ORM\ManyToOne(inversedBy: 'personnes')]
-    private ?job $job = null;
-
-    
+    private ?Job $job = null;
 
     public function __construct()
     {
@@ -91,12 +87,12 @@ class Personne
         return $this;
     }
 
-    public function getProfile(): ?profile
+    public function getProfile(): ?Profile
     {
         return $this->profile;
     }
 
-    public function setProfile(?profile $profile): static
+    public function setProfile(?Profile $profile): static
     {
         $this->profile = $profile;
 
@@ -127,18 +123,15 @@ class Personne
         return $this;
     }
 
-    public function getJob(): ?job
+    public function getJob(): ?Job
     {
         return $this->job;
     }
 
-    public function setJob(?job $job): static
+    public function setJob(?Job $job): static
     {
         $this->job = $job;
 
         return $this;
     }
-
-
 }
-
