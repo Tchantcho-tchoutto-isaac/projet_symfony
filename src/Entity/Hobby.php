@@ -44,4 +44,8 @@ class Hobby
 
         return $this;
     }
+    public function __toString()
+    {
+        return $this->designation; // ou une autre propriété que vous souhaitez utiliser comme représentation de chaîne
+    }
 }

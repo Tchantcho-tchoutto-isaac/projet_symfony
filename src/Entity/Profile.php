@@ -54,4 +54,9 @@ class Profile
 
         return $this;
     }
+    
+    public function __toString()
+    {
+        return $this->rs."".$this->url; // ou une autre propriété que vous souhaitez utiliser comme représentation de chaîne
+    }
 }
