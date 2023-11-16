@@ -83,12 +83,20 @@ class PersonneController extends AbstractController
     }
 
 
-    #[Route('/add', name: 'personne.add')]
-    public function addPersonne(ManagerRegistry $doctrine , Request $request): Response
+    #[Route('/edit/{id?0}', name: 'personne.edit')]
+    public function addPersonne(ManagerRegistry $doctrine , personne $personne = null, Request $request): Response
     {
+
+        $new =false;
+        if(!$personne) {
+            $personne = new personne();
+            $new = true;
+        } 
+        else
+
         $entityManager=$doctrine->getManager();
         $personne=new personne();
-        
+     
         $form= $this->createForm(PersonneType::class,$personne );
         
         // mon formulaire va aller traiter la requete 
@@ -98,9 +106,15 @@ class PersonneController extends AbstractController
             $manager= $doctrine->getManager();
             $manager->persist($personne);
             $entityManager->flush();
-            $this->addFlash(type:'success',message:'à été ajouté avec succès');
+            
+            if($new){
+                $message="à été ajouté avec succès";
+            }else{
+                $message="à été mis à jour avec succès";
+            }
+            $this->addFlash(type:'success',message:$message);
 
-            return $this-> redirectToRoute(route: 'personne.List');
+            return $this-> redirectToRoute(route: '/personne.List');
        
         
     }else{
