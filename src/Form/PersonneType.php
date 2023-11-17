@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Personne;
+use App\Entity\Profile;
+use Doctrine\ORM\Mapping\Entity;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,8 +19,12 @@ class PersonneType extends AbstractType
             ->add('firstname')
             ->add('name')
             ->add('age')
-            ->add('profile')
-            ->add('hobbies')
+            ->add('profile', EntityType::class, [
+                'expanded' => true,
+                'class' => Profile::class,
+                'multiple' => false
+            ])
+            ->add('hobbies',)
             ->add('job')
             ->add('editer',type:SubmitType::class)
         ;

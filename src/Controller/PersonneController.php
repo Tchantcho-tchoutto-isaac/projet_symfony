@@ -114,7 +114,7 @@ class PersonneController extends AbstractController
             }
             $this->addFlash(type:'success',message:$message);
 
-            return $this-> redirectToRoute(route: '/personne.List');
+            return $this-> redirectToRoute(route: 'personne.List');
        
         
     }else{
