@@ -6,12 +6,17 @@ use App\Entity\Personne;
 use App\Form\PersonneType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
-#[Route('personne')]
+
+/**
+ * @Route("/personne")
+ */
 class PersonneController extends AbstractController
 {
     // afficher toutes les personnes 
@@ -75,16 +80,71 @@ class PersonneController extends AbstractController
         
         if(!$personne){
             $this->addFlash(type:'error',message:"la personne n'exsite pas ");
-            return $this->redirectToRoute('personne.List');
+            return $this->redirectToRoute('alls');
         }
         return $this->render('personne/detail.html.twig', ['personne' => $personne]);
     
       
     }
 
-
     #[Route('/edit/{id?0}', name: 'personne.edit')]
-    public function addPersonne(ManagerRegistry $doctrine , personne $personne = null, Request $request): Response
+    public function addPersonne(ManagerRegistry $doctrine, Personne $personne = null, Request $request, SluggerInterface $slugger): Response
+    {
+        $new = false;
+        if (!$personne) {
+            $personne = new Personne();
+            $new = true;
+        }
+    
+        // Supprimez le bloc "else" existant pour éviter la confusion
+        $form = $this->createForm(PersonneType::class, $personne);
+    
+        // Mon formulaire va aller traiter la requête
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $photo = $form->get('Photo')->getData();
+    
+            if ($photo) {
+                $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photo->guessExtension();
+                try {
+                    $photo->move(
+                        $this->getParameter('Personne_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                }
+                $personne->setImage($newFilename);
+            }
+    
+            $manager = $doctrine->getManager();
+            $manager->persist($personne);
+            $manager->flush();
+    
+            if ($new) {
+                $message = "a été ajouté avec succès";
+            } else {
+                $message = "a été mis à jour avec succès";
+            }
+            $this->addFlash('success', $message);
+    
+            return $this->redirectToRoute('personne.List');
+        }
+    
+        return $this->render('personne/add-personne.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    
+
+
+
+
+/*
+    #[Route('/edit/{id}', name: 'personne.edit')]
+    public function addPersonne(ManagerRegistry $doctrine , personne $personne = null, Request $request,SluggerInterface $slugger): Response
     {
 
         $new =false;
@@ -92,7 +152,6 @@ class PersonneController extends AbstractController
             $personne = new personne();
             $new = true;
         } 
-        else
 
         $entityManager=$doctrine->getManager();
         $personne=new personne();
@@ -102,6 +161,21 @@ class PersonneController extends AbstractController
         // mon formulaire va aller traiter la requete 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $photo=$form->get('Photo')->getData();
+
+            if($photo){
+                $originalFilename=pathinfo($photo->getClientOriginalName(), flags:PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename=$safeFilename.'-'.uniqid().'.'.$photo->guessExtension();
+                try{
+                    $photo->move(
+                        $this->getParameter('Personne_directory'),
+                        $newFilename
+                    
+                    );
+                } catch(FileException $e){}
+                $personne->setImage($newFilename);
+            }
 
             $manager= $doctrine->getManager();
             $manager->persist($personne);
@@ -123,6 +197,9 @@ class PersonneController extends AbstractController
         ]);
     }
 }
+
+*/
+
 
     #[Route('/delete/{id}', name:'personne.delete')]
     public function deletePersonne( personne $personne=null, ManagerRegistry $doctrine): RedirectResponse {

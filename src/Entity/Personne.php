@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 /**
@@ -23,6 +25,12 @@ class Personne
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+  
+/**
+ * @Assert\NotBlank(message="veuillez renseigner ce champ")
+ * @Assert\Length(min=4, minMessage="veuillez avoir au moins 4 caractères")
+ */
+
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]

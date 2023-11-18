@@ -25,9 +25,10 @@ class PersonneType extends AbstractType
             ->add('profile', EntityType::class, [
                 'expanded' => true,
                 'class' => Profile::class,
-                'multiple' => false
+                'multiple' => false,
+                'required' => false
             ])
-            ->add('hobbies',)
+            ->add('hobbies')
             ->add('job')
             ->add('Photo', FileType::class, [
                 'label'=>'Votre image de profil (Des fichier images Uniquement)',
