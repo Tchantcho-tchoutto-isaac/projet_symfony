@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Job;
 use App\Entity\Personne;
 use App\Entity\Profile;
 use Doctrine\ORM\Mapping\Entity;
@@ -26,10 +27,19 @@ class PersonneType extends AbstractType
                 'expanded' => true,
                 'class' => Profile::class,
                 'multiple' => false,
-                'required' => false
+                'required' => false,
+                'attr'=>[
+                    'class'=>'select2'
+                    ]
             ])
             ->add('hobbies')
-            ->add('job')
+            ->add('job', EntityType::class, [
+                'required'=>false,
+                'class'=>Job::class,
+                'attr'=>[
+                    'class'=>'select2'
+                    ]
+                ])
             ->add('Photo', FileType::class, [
                 'label'=>'Votre image de profil (Des fichier images Uniquement)',
                 'mapped'=>false,
