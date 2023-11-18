@@ -24,7 +24,7 @@ class PersonneType extends AbstractType
             ->add('name')
             ->add('age')
             ->add('profile', EntityType::class, [
-                'expanded' => true,
+                'expanded' => false,
                 'class' => Profile::class,
                 'multiple' => false,
                 'required' => false,
