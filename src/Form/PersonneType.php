@@ -34,10 +34,11 @@ class PersonneType extends AbstractType
             ])
             ->add('hobbies')
             ->add('job', EntityType::class, [
+                'expanded' => false,
                 'required'=>false,
                 'class'=>Job::class,
-                'attr'=>[
-                    'class'=>'select2'
+                'attr'=> [
+                    'class'=>'Select2'
                     ]
                 ])
             ->add('Photo', FileType::class, [
